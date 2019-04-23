@@ -5,15 +5,14 @@ MAINTAINER doufu
 # Labels consumed by Red Hat build service
 LABEL name="openshift3/jenkins-agent-nodejs-8-extend"
 
+USER root
+
 # Install extend module
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \    
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum-config-manager --enable rhel-server-rhscl-8-rpms && \ 
-    yum-config-manager --enable rhel-8-server-optional-rpms && \
-    yum-config-manager --disable epel >/dev/null || : && \
+RUN curl https://raw.githubusercontent.com/cloudrouter/centos-repo/master/CentOS-Base.repo -o /etc/yum.repos.d/CentOS-Base.repo && \
+    curl http://mirror.centos.org/centos-7/7/os/x86_64/RPM-GPG-KEY-CentOS-7 -o /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
+    DISABLES="--disablerepo=rhel-server-extras --disablerepo=rhel-server --disablerepo=rhel-fast-datapath --disablerepo=rhel-server-optional --disablerepo=rhel-server-ose --disablerepo=rhel-server-rhscl" && \
     INSTALL_PKGS="libtool automake autoconf" && \
-    ln -s /usr/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    yum ${DISABLES} install -y $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
