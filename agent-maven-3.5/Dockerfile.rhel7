@@ -1,5 +1,5 @@
 FROM quay.io/openshift/origin-jenkins-agent-base:v4.0
-MAINTAINER Gabe Montero <gmontero@redhat.com>
+MAINTAINER Akram Ben Aissi <abenaiss@redhat.com>
 
 # Labels consumed by Red Hat build service
 LABEL com.redhat.component="jenkins-agent-maven-35-rhel7-container" \
@@ -16,10 +16,7 @@ ENV MAVEN_VERSION=3.5 \
     PROMPT_COMMAND=". /usr/local/bin/scl_enable"
 
 # Install Maven
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-server-rhscl-8-rpms && \
-    yum-config-manager --disable epel >/dev/null || : && \
-    INSTALL_PKGS="java-1.8.0-openjdk-devel rh-maven35*" && \
+RUN INSTALL_PKGS="java-1.8.0-openjdk-devel rh-maven35*" && \
     yum install -y $INSTALL_PKGS && \
     rpm -V  java-1.8.0-openjdk-devel rh-maven35 && \
     yum clean all -y && \

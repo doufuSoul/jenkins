@@ -42,10 +42,10 @@ Choose either the CentOS7 or RHEL7 based image:
 *  **RHEL7 based image**
 
 You can access these images from the Red Hat Container Catalog. For OpenShift v3 see:
-    * https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-2-rhel7
-    * https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
-    * https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-agent-maven-35-rhel7
-    * https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-agent-nodejs-8-rhel7
+* https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-2-rhel7
+* https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
+* https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-agent-maven-35-rhel7
+* https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/jenkins-agent-nodejs-8-rhel7
 
 To build a RHEL7 based image, you need to run Docker build on a properly
 subscribed RHEL machine.
@@ -56,13 +56,13 @@ subscribed RHEL machine.
     $ make build TARGET=rhel7 VERSION=2
     ```
 
-Also note, as of 3.11, the RHEL images are hosted at registry.redhat.io as well.  This is the terms based 
+Also note, as of 3.11, the RHEL images are hosted at registry.redhat.io as well.  This is the terms based
 registry and requires credentials for access.  See [Transitioning the Red Hat container registry](https://www.redhat.com/en/blog/transitioning-red-hat-container-registry) for details:
-    * registry.redhat.io/openshift3/jenkins-2-rhel7:v3.11
-    * registry.redhat.io/openshift3/jenkins-agent-nodejs-8-rhel7:v3.11
-    * registry.redhat.io/openshift3/jenkins-agent-maven-35-rhel7:v3.11
-    * registry.redhat.io/openshift3/jenkins-slave-base-rhel7:v3.11
-    
+* registry.redhat.io/openshift3/jenkins-2-rhel7:v3.11
+* registry.redhat.io/openshift3/jenkins-agent-nodejs-8-rhel7:v3.11
+* registry.redhat.io/openshift3/jenkins-agent-maven-35-rhel7:v3.11
+* registry.redhat.io/openshift3/jenkins-slave-base-rhel7:v3.11
+
 The openshift cluster install for 3.11 will ensure that credentials are provided and subsequently available on the nodes
 in the cluster to facilitate image pulling.
 
@@ -89,44 +89,59 @@ on all provided versions of Jenkins.**
 If you are curious about the precise level of Jenkins for either `jenkins-2-centos7` or `jenkins-2-rhel7`, then
 you can execute:
 
-    
+
     $ docker run -it <image spec> /etc/alternatives/java -jar /usr/lib/jenkins/jenkins.war --version
-    
+
 
 For example:
 
-    
+
     $ docker run -it docker.io/openshift/jenkins-2-centos7:latest /etc/alternatives/java -jar /usr/lib/jenkins/jenkins.war --version
 
 Installation (OpenShift V4)
 ---------------------------------
 
 Starting with v4.0, the images are only available on quay.io for public community support. Their pull specs are:
-* quay.io/openshift/origin-jenkins:v4.0
-* quay.io/openshift/origin-jenkins-agent-nodejs:v4.0
-* quay.io/openshift/origin-jenkins-agent-maven:v4.0
-* quay.io/openshift/origin-jenkins-agent-base:v4.0
+* quay.io/openshift/origin-jenkins:<release tag>
+* quay.io/openshift/origin-jenkins-agent-nodejs:<release tag>
+* quay.io/openshift/origin-jenkins-agent-maven:<release tag>
+* quay.io/openshift/origin-jenkins-agent-base:<release tag>
 
-The images are also still available at the Red Hat Container Catalog for customers with subscriptions, 
+Visit quay.io to discover the set of tags for each image.  For example, for the core jenkins image, the tags are [here](https://quay.io/repository/openshift/origin-jenkins?tab=tags)
+
+The images are also still available at the Red Hat Container Catalog for customers with subscriptions,
 though with some changes in the naming.
 
 As with the initial introduction in 3.11, given the [transitioning of the Red Hat container registry](https://www.redhat.com/en/blog/transitioning-red-hat-container-registry), the RHEL based images are available at both registry.access.redhat.com and registry.redhat.io.
-The terms based registry, registry.redhat.io, which requires credentials for access, is the strategic direction, and 
-will be the only location for RHEL8 based content when that is available.  The pull secret you obtain from try.openshift.com includes 
+The terms based registry, registry.redhat.io, which requires credentials for access, is the strategic direction, and
+will be the only location for RHEL8 based content when that is available.  The pull secret you obtain from try.openshift.com includes
 access to registry.redhat.io.  The image pull specs are:
-* registry.redhat.io/openshift4/ose-jenkins:v4.0
-* registry.redhat.io/openshift4/ose-jenkins-agent-nodejs:v4.0
-* registry.redhat.io/openshift4/ose-jenkins-agent-maven:v4.0
-* registry.redhat.io/openshift4/ose-jenkins-agent-base:v4.0
+* registry.redhat.io/openshift4/ose-jenkins:<release tag>
+* registry.redhat.io/openshift4/ose-jenkins-agent-nodejs:<release tag>
+* registry.redhat.io/openshift4/ose-jenkins-agent-maven:<release tag>
+* registry.redhat.io/openshift4/ose-jenkins-agent-base:<release tag>
 
 OpenShift v4 also removes the 32 bit JVM option.  Only 64 bit will be provided for all images.
 
 The `Dockerfile.rhel7` variants still exists, but as part of the `CentOS` vs. `RHEL` distinction no longer existing, the various `Dockerfile` files have been renamed to `Dockerfile.localdev` to more clearly denote that they are for builds on developers' local machines that most likely do not have a Red Hat subscription / entitlement.  The `Dockerfile.localdev` variants are structured to allow building of the images on machines without `RHEL` subscriptions, even though the base images are no longer based on `CentOS`.  Subscriptions are still required for use of `Dockerfile.rhel7`.
 
 With any local builds, if for example you plan on submitting a PR to this repository, you still build the same way as with OpenShift v3 with respect to the `make` invocations.  
-    
+
 Be aware, no support in any way is provided for running images created from any of the `Dockerfile.localdev` files.  And in fact the images hosted on both quay.io and the Red Hat Container Catalog are based off the `Dockerfile.rhel7` files.
-    
+
+And lastly, as part of 4.x cluster installs, the OpenShift Jenkins image version corresponding to the cluster version is part of the image payload for the install.  So the `jenkins` ImageStream in the `openshift` namespace will have image references that point to the image registry associated with your install instead of these public registries noted above.  There is also an ImageStream for each of the agent images in the `openshift` namespace in 4.x installs.
+
+
+Startup notes for the Jenkins core image
+---------------------------------
+
+When you run you startup the main Jenkins image in an OpenShift pod for the first time, it performs various set up actions, including:
+* Setting the JVM parameters for the actual start of the Jenkins JVM
+* Updating the /etc/passwd so that the random, non-root user ID employed works
+* Copies all the default configuration from the image to the appropriate locations under the Jenkins home directory (which maps to the image's volume mount)
+* Copies all the plugins to the appropriate locations under the Jenkins home directory
+
+By default, all copies to the Jenkins home directory are only done on the initial startup if a Persistent Volume is employed for the Jenkins deployment.  There are ways to override that behavior by environment variables (see the next section below).  But you can also recycle the PVCs during restarts of your Jenkins deployment if you update the image being used and want to reset the system that way.
 
 
 Environment variables
@@ -148,6 +163,7 @@ initialization by passing `-e VAR=VALUE` to the Docker run command.
 |  `ENABLE_FATAL_ERROR_LOG_FILE`       | When running this image with an OpenShift persistent volume claim for the Jenkins config directory, this environment variable allows the fatal error log file to persist if a fatal error occurs. The fatal error file will be located at `/var/lib/jenkins/logs`.   |
 |  `NODEJS_SLAVE_IMAGE`  | Setting this value will override the image used for the default NodeJS agent pod configuration.  For 3.x, the default NodeJS agent pod uses `docker.io/openshift/jenkins-agent-nodejs-8-centos7` or `registry.redhat.io/openshift3/jenkins-agent-nodejs-8-rhel7` depending whether you are running the centos or rhel version of the Jenkins image.  This variable must be set before Jenkins starts the first time for it to have an effect. For 4.x, the image is included in the 4.0 payload via an imagestream in the openshift namespace, and the image spec points to the internal image registry.  If you are running this image outside of OpenShift, you must either set this environment variable or manually update the setting to an accessible image spec. |
 |  `MAVEN_SLAVE_IMAGE`   | Setting this value overrides the image used for the default maven agent pod configuration.  For 3.x, the default maven agent pod uses `docker.io/openshift/jenkins-agent-maven-35-centos7` or `registry.redhat.io/openshift3/jenkins-agent-maven-35-rhel7` depending whether you are running the centos or rhel version of the Jenkins image.  For 4.x, the image is included in the 4.0 payload via an imagestream in the openshift namespace, and the image spec points to the internal image registry.  If you are running this image outside of OpenShift, you must either set this environment variable or manually update the setting to an accessible image spec. This variable must be set before Jenkins starts the first time for it to have an effect. |
+|  `JENKINS_UC_INSECURE`       | When your Jenkins Update Center repository is using a self-signed certificate with an unknown Certificate Authority, this variable allows one to bypass the repository's SSL certificate check. The variable applies to download of the plugin which may occur during Jenkins image build, if you build an extension of the jenkins image or if you run the Jenkins image and leverage one of the options to download additional plugins (use of s2i whith plugins.txt or use of `INSTALL_PLUGINS` environment variable. |
 
 
 
@@ -199,16 +215,16 @@ The `oc` binary is still included in the v4 images as well.  And the same recomm
 Jenkins security advisories, the "master" image from this repository, and the `oc` binary
 ---------------------------------
 
-Any security advisory related updates to Jenkins core or the plugins we include in the OpenShift Jenkins master image will only occur in the v3.11 and v4.x 
+Any security advisory related updates to Jenkins core or the plugins we include in the OpenShift Jenkins master image will only occur in the v3.11 and v4.x
 branches of this repository.
 
-We do support running the v3.11 version of the master image against older v3.x (as far back as v3.4) OpenShift clusters if you want to pick up Jenkins security advisory 
+We do support running the v3.11 version of the master image against older v3.x (as far back as v3.4) OpenShift clusters if you want to pick up Jenkins security advisory
 updates.  Per the prior section, we advise that you import a version of `oc` into your Jenkins installation that matches your OpenShift
 cluster via the "Global Tool Configuration" option in Jenkins either via the UI, CLI, or groovy init scripts.
 
 Our OpenShift Client Plugin has some documentation on doing this [here](https://github.com/openshift/jenkins-client-plugin#setting-up-jenkins-nodes).
 
-Also note for the RHEL image, the v3.11 image examines whether it is running in an OpenShift Pod and what version the cluster is at.  If the cluster is at a version prior to v3.11, the Maven and NodeJS agent example configuration for the kubernetes plugin will point to registry.access.redhat.com for 
+Also note for the RHEL image, the v3.11 image examines whether it is running in an OpenShift Pod and what version the cluster is at.  If the cluster is at a version prior to v3.11, the Maven and NodeJS agent example configuration for the kubernetes plugin will point to registry.access.redhat.com for
 the image setting.  If the cluster is at v3.11, the image setting will point to the terms based registry at registry.access.io.
 
 
@@ -252,7 +268,7 @@ When PRs for this repository's `openshift-3*` branches are merged, they kick off
 Jenkins CI/CD server](https://ci.openshift.redhat.com/jenkins/view/All/job/push_jenkins_images/).  When those builds complete,
 new versions of the CentOS7 based versions of the images produced by this repository are pushed to Docker Hub.  See the top of the README for the precise list.
 
-For v4.0, the job definitions for this repository in https://github.com/openshif/release result in our Prow based infrastructure to eventually 
+For v4.0, the job definitions for this repository in https://github.com/openshif/release result in our Prow based infrastructure to eventually
 mirror the image content on quay.io.
 
 #### Plugin installation for RHEL7 V3 and V4
@@ -363,6 +379,28 @@ related to developing, creating new versions, and ultimately updating the images
 
 * **Kubernetes Plugin**
 Though not originated out of the OpenShift organization, this plugin is invaluable in that it allows slaves to be dynamically provisioned on multiple Docker hosts using [Kubernetes](https://github.com/kubernetes/kubernetes). To learn how to use this plugin, see the [example](https://github.com/openshift/origin/tree/master/examples/jenkins/master-slave) available in the OpenShift Origin repository. For more details about this plugin, visit the [plugin](https://wiki.jenkins-ci.org/display/JENKINS/Kubernetes+Plugin) web site.
+
+Configuration files
+-------------------------------
+
+The layering and s2i build flows noted above for updating the list of plugins can also be used to update the configuration injected into the Jenkins deployment.  However, don't forget the note about copying of config data and Persistent Volumes in the [startup notes](#startup-notes-for-the-jenkins-core-image).
+
+A typical scenario employed by our users has been extending the Jenkins image to add groovy init scripts to customize your Jenkins installation.
+
+A quick recipe of how to do that via layering would be:
+
+* mkdir -p contrib/openshift/configuration/init.groovy.d
+* create a contrib/openshift/configuration/init.groovy.d/foo.groovy file with whatever groovy init steps you desire
+* create a Dockerfile with (adjusting the image ref as you see fit)
+
+```
+FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.11
+COPY ./contrib/openshift /opt/openshift
+```
+
+And then update your Jenkins deployment to use the resulting image directly, or update the ImageStreamTag reference you Jenkins deployment is employing, with our new image.  During startup,
+the existing run script your new image inherits from this repositories Jenkins image will copy the groovy init script to the appropriate spot under the Jenkins home directory.
+
 
 Usage
 ---------------------------------
