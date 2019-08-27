@@ -32,7 +32,7 @@ COPY package_file ./
 
 # Install android-sdk
 RUN mkdir -p ${ANDROID_HOME}/${ANDROID_SDK_VERSION} && \
-    curl -LOk https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip
+    curl -LOk https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip && \
     unzip sdk-tools-linux-${ANDROID_SDK_VERSION}.zip -d ${ANDROID_HOME}/${ANDROID_SDK_VERSION} && \
     rm -rf sdk-tools-linux-${ANDROID_SDK_VERSION}.zip && \
     yes | ${ANDROID_HOME}/${ANDROID_SDK_VERSION}/tools/bin/sdkmanager --licenses && \
